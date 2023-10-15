@@ -15,9 +15,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    logger()
-        ->channel('telegram')
-        ->error('Hello from Laravel!');
     return view('welcome');
-
 });
