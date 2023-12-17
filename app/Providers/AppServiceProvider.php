@@ -26,11 +26,11 @@ class AppServiceProvider extends ServiceProvider
     {
         Model::preventLazyLoading(!app()->isProduction());
         Model::preventSilentlyDiscardingAttributes(!app()->isProduction());
-        DB::whenQueryingForLongerThan(500, function (Connection $connection) {
-            logger()
-                ->channel('telegram')
-                ->error('Long query detected: ' . $connection->query()->toRawSql());
-        });
+//        DB::whenQueryingForLongerThan(500, function (Connection $connection) {
+//            logger()
+//                ->channel('telegram')
+//                ->error('Long query detected: ' . $connection->query()->toRawSql());
+//        });
 
         $kernel = app(Kernel::class);
         $kernel->whenRequestLifecycleIsLongerThan(
