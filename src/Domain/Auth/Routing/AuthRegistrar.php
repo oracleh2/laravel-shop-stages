@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Auth\SocialiteGithubController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Contracts\Routing\Registrar;
@@ -45,9 +46,9 @@ class AuthRegistrar implements RouteRegistrar
                 Route::get('/reset-password/{token}', 'resetPasswordShow')->middleware('guest')->name('password.reset');
                 Route::post('/reset-password', 'resetPasswordSubmit')->middleware('guest')->name('password.update');
             });
-            Route::controller(SocialiteGithubController::class)->group(function () {
-                Route::get('auth/github/redirect', 'githubRedirect')->name('socialite.github.redirect');
-                Route::get('auth/github/callback', 'githubCallback')->name('socialite.github.callback');
+            Route::controller(SocialiteController::class)->group(function () {
+                Route::get('auth/{driver}/redirect', 'redirect')->name('socialite.redirect');
+                Route::get('auth/{driver}/callback', 'callback')->name('socialite.callback');
             });
         });
     }
