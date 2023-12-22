@@ -10,14 +10,18 @@ class RefreshCommand extends Command
 {
     protected $signature = 'refresh';
     protected $description = 'Clear and refresh the application files and database seeds';
-    public function handle():void
+    public function handle(): int
     {
         if(app()->isProduction())
-            return;
+            return self::FAILURE;
 
-        File::cleanDirectory(storage_path('app/public/images/products'));
+//        File::cleanDirectory(storage_path('app/public/images/products'));
+        Storage::deleteDirectory('images/products');
+        Storage::deleteDirectory('images/brands');
         $this->call('migrate:fresh', [
             '--seed' => true
         ]);
+
+        return self::SUCCESS;
     }
 }

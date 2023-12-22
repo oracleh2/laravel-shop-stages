@@ -21,13 +21,12 @@ class ProductFactory extends Factory
         return [
             'title' => $this->faker->words(2, true),
             'brand_id' => Brand::query()->inRandomOrder()->first()->id,
-            'thumbnail' => $this->faker->file(
-                base_path('tests/Fixtures/images/products'),
-                storage_path('app/public/images/products'),
-                false
-            ),
+//
+            'thumbnail' => $this->faker->fixturesImage('products', 'images/products', false),
             'description' => $this->faker->paragraph(),
             'price' => $this->faker->numberBetween(1000, 100000),
+            'on_home_page' => $this->faker->boolean(10),
+            'sorting' => $this->faker->numberBetween(1, 999),
         ];
     }
 }

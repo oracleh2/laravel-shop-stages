@@ -1,5 +1,8 @@
+// const colors = require('tailwindcss/colors')
+
 module.exports = {
-  content: ["./resources/**/*.blade.php", "./resources/**/*.js", "./resources/**/*.vue"],
+  // content: ["./resources/**/*.blade.php", "./resources/**/*.js", "./resources/**/*.vue"],
+  content: ["./resources/**/*.blade.php",],
   darkMode: 'media',
   theme: {
     screens: {
@@ -35,15 +38,20 @@ module.exports = {
         dark: "#222",
         gray: "#454545",
         darkblue: "#1E1F43",
-				body: '#BDBECA',
-				card: '#323359',
+        body: '#BDBECA',
+        card: '#323359',
       },
     },
   },
+  safelist: [
+    {
+      pattern: /pink/,
+    },
+  ],
   variants: {
     extend: {},
   },
   plugins: [
-		require('@tailwindcss/line-clamp'),
+		// require('@tailwindcss/line-clamp'),
 	],
 }
