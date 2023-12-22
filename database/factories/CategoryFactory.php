@@ -19,6 +19,8 @@ class CategoryFactory extends Factory
     {
         return [
             'title' => $this->faker->words(2, true),
+            'on_home_page' => $this->faker->boolean(80),
+            'sorting' => $this->faker->numberBetween(1, 999)
         ];
     }
 }

@@ -21,6 +21,9 @@ return new class extends Migration
             $table->string('thumbnail')->nullable();
             $table->text('description');
             $table->unsignedInteger('price')->default(0);
+            $table->boolean('on_home_page')->default(false);
+            $table->integer('sorting')
+                ->default(999);
             $table->foreignIdFor(Brand::class)
                 ->nullable()
                 ->constrained()
