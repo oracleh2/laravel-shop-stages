@@ -4,12 +4,8 @@
 @section('content')
     <main class="py-16 lg:py-20">
         <div class="container">
-
             <section>
-                <!-- Section heading -->
                 <h2 class="text-lg lg:text-[42px] font-black">Наши преимущества</h2>
-
-                <!-- Advantages -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mt-8">
                     <div class="flex flex-col items-center gap-2 py-6 md:py-8 px-4 md:px-6 rounded-xl bg-purple text-white text-center">
                         <svg class="w-10 md:w-12 h-10 md:h-12 opacity-40" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
@@ -43,36 +39,26 @@
             </section>
 
             <section class="mt-16 lg:mt-24">
-                <!-- Section heading -->
                 <h2 class="text-lg lg:text-[42px] font-black">Категории</h2>
-
-                <!-- Categories -->
                 <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-5 mt-8">
-                    @each('catalog.shared.category', $categories, 'item')
-
-
+                    @foreach($categories as $item)
+                        @include('catalog.shared.category', ['item' => $item, 'category' => $category ?? null])
+                    @endforeach
                 </div>
             </section>
 
             <section class="mt-16 lg:mt-24">
-                <!-- Section heading -->
                 <h2 class="text-lg lg:text-[42px] font-black">Каталог товаров</h2>
-
-                <!-- Products list -->
                 <div class="products grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-x-8 gap-y-8 lg:gap-y-10 2xl:gap-y-12 mt-8">
                     @each('catalog.shared.product', $products, 'item')
                 </div>
-
                 <div class="mt-12 text-center">
-                    <a href="catalog.html" class="btn btn-purple">Все товары &nbsp;→</a>
+                    <a href="{{ route('catalog') }}" class="btn btn-purple">Все товары &nbsp;→</a>
                 </div>
             </section>
 
             <section class="mt-20">
-                <!-- Section heading -->
                 <h2 class="text-lg lg:text-[42px] font-black">Бренды</h2>
-
-                <!-- Brands list -->
                 <div class="grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-6 gap-4 md:gap-8 mt-12">
                     @each('catalog.shared.brand', $brands, 'item')
                 </div>
