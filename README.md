@@ -8,4 +8,5 @@
 - [ ] Реализовать урок с исключениями
 - [ ] Макросы на view
 - [X] Сброс пароля тест и дебаг
-- [ ] https://learn.cutcode.dev/course/75
+- [X] https://learn.cutcode.dev/course/75
+- [ ] https://learn.cutcode.dev/course/90

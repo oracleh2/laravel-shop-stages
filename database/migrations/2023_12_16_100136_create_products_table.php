@@ -1,8 +1,8 @@
 <?php
 
-use App\Models\Brand;
-use App\Models\Category;
 use App\Models\Product;
+use Domain\Catalog\Models\Brand;
+use Domain\Catalog\Models\Category;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,20 +16,26 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
+            $table->string('title')
+                ->fulltext();
             $table->string('slug')->unique();
             $table->string('thumbnail')->nullable();
-            $table->text('description');
-            $table->unsignedInteger('price')->default(0);
+            $table->decimal('price', 12, 2)->default(0);
             $table->boolean('on_home_page')->default(false);
             $table->integer('sorting')
                 ->default(999);
+            $table->text('description')
+                ->fulltext()
+                ->nullable();
             $table->foreignIdFor(Brand::class)
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete()
                 ->cascadeOnUpdate();
+
             $table->timestamps();
+
+            $table->fullText(['title', 'description']);
         });
 
         Schema::create('category_product', function (Blueprint $table) {
@@ -42,6 +48,8 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
+
+
         });
     }
 
