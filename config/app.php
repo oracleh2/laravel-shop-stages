@@ -1,5 +1,6 @@
 <?php
 
+use App\Providers\CatalogServiceProvider;
 use App\Providers\DomainServiceProvider;
 use App\Providers\TestingServiceProvider;
 use App\Providers\ViewServiceProvider;
@@ -177,6 +178,7 @@ return [
         ViewServiceProvider::class,
         TestingServiceProvider::class,
         DomainServiceProvider::class,
+        CatalogServiceProvider::class,
     ])->toArray(),
 
     /*

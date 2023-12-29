@@ -1,0 +1,162 @@
+version: '3.8'
+
+networks:
+  laravel:
+
+
+services:
+  app:
+    build:
+      context: ./.docker/dockerfiles
+      dockerfile: nginx.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    ports:
+      - "80:80"
+#    user: "1000:1000"
+    volumes:
+      - .:/var/www/shop:delegated
+      - type: bind
+        source: ./.env.docker
+        target: /var/www/shop/.env
+    depends_on:
+      - php
+      - redis
+      - mysql
+      - mailhog
+#      - postgres
+#      - postgres-test
+    networks:
+      - laravel
+
+
+  mysql:
+    image: mariadb:10.6
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: shop
+      MYSQL_USER: shop
+      MYSQL_PASSWORD: 12312344
+      MYSQL_ROOT_PASSWORD: 12312344
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - laravel
+
+  postgres:
+    container_name: pgsql
+    image: postgres:latest
+    tty: true
+    env_file:
+      - .env.docker
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=shop
+      - POSTGRES_USER=shop
+      - POSTGRES_PASSWORD=12312344
+    networks:
+      - laravel
+
+  postgres-test:
+    container_name: pgsql-test
+    image: postgres:latest
+    tty: true
+    env_file:
+      - .env.testing
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_DB=shop_test
+      - POSTGRES_USER=shop_test
+      - POSTGRES_PASSWORD=12312344_test
+    networks:
+      - laravel
+
+  php:
+    build:
+      context: ./.docker/dockerfiles
+      dockerfile: php.root.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    ports:
+      - "9000:9000"
+#    user: "1000:1000"
+    volumes:
+      - ./:/var/www/shop:delegated
+    networks:
+      - laravel
+
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - laravel
+
+  composer:
+    build:
+      context: ./.docker/dockerfiles
+      dockerfile: php.root.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+#    user: "1000:1000"
+    volumes:
+      - ./:/var/www/shop
+    depends_on:
+      - php
+    entrypoint: [ 'composer', '--ignore-platform-reqs' ]
+    networks:
+      - laravel
+
+  npm:
+    build:
+      context: ./.docker/dockerfiles
+      dockerfile: php.root.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+      #    user: "1000:1000"
+    volumes:
+      - ./:/var/www/shop
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+      - "5173:5173"
+    depends_on:
+      - php
+    working_dir: /var/www/shop
+    entrypoint: [ 'npm' ]
+    networks:
+      - laravel
+
+  artisan:
+    build:
+      context: ./.docker/dockerfiles
+      dockerfile: php.root.dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+#    user: "1000:1000"
+    volumes:
+      - ./:/var/www/shop:delegated
+    depends_on:
+      - mysql
+    entrypoint: [ 'php', '/var/www/shop/artisan' ]
+    networks:
+      - laravel
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - laravel

@@ -1,0 +1,58 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./:/var/www/shop
+      - ./.docker/nginx/conf.d/:/etc/nginx/conf.d/
+    ports:
+      - "80:80"
+    depends_on:
+      - app
+    container_name: ${APP_NAME}_nginx
+
+  app:
+    build:
+      context: .
+      dockerfile: .docker/my/app/Dockerfile
+    volumes:
+      - ./:/var/www/shop
+    depends_on:
+      - db
+      - redis
+    container_name: ${APP_NAME}_app
+
+  db:
+    image: mysql
+    restart: always
+    volumes:
+      - ./data/mysql/dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    ports:
+      - "3306:3306"
+    environment:
+        MYSQL_DATABASE: "shop"
+        MYSQL_USER: "shop"
+        MYSQL_PASSWORD: "12312344"
+        MYSQL_ROOT_PASSWORD: "root"
+    container_name: ${APP_NAME}_db
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -u shop -p1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 4G
+
+  redis:
+    image: redis:latest
+    volumes:
+      - ./.data/redis:/data
+    ports:
+      - "6379:6379"
+    container_name: ${APP_NAME}_redis
+networks:
+  shop_network:
+    external: true

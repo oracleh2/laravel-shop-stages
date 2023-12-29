@@ -1,14 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\HomeController;
 use Database\Factories\BrandFactory;
 use Database\Factories\CategoryFactory;
 use Database\Factories\ProductFactory;
-use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 
@@ -60,7 +57,7 @@ class HomeControllerTest extends TestCase
                 'sorting' => 1,
             ]);
 
-        $response = $this->get(action([HomeController::class, 'index']));
+        $response = $this->get(action(HomeController::class));
 
         $response
             ->assertOk()

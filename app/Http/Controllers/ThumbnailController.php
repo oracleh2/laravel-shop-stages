@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver as GdDriver;
@@ -22,11 +23,13 @@ class ThumbnailController extends Controller
 
         if(!$storage->exists($newDirPath))
             $storage->makeDirectory($newDirPath);
+//        dd($storage->path($newDirPath));
+//        dd(gd_info());
+        File::chmod($storage->path($newDirPath), 0777);
 
         if(!$storage->exists($resultPath)){
-            $manager = new ImageManager(
-                new GdDriver()
-            );
+
+            $manager = new ImageManager( new GdDriver() );
             $image = $manager->read($storage->path($realPath));
             [$width, $height] = explode('x', $size);
             $image->{$method}($width, $height);

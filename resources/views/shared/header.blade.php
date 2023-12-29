@@ -7,7 +7,8 @@
                 </a>
             </div><!-- /.header-logo -->
             <div class="header-menu grow hidden lg:flex items-center ml-8 mr-8 gap-8">
-                <form action="{{ isset($category) && $category?->exist ? route('catalog', $category) : route('catalog') }}" class="hidden lg:flex gap-3" >
+
+                <form action="{{ isset($category) ? route('catalog', $category) : route('catalog') }}" class="hidden lg:flex gap-3" >
                     <input
                         name="q"
                         value="{{ request()->get('q') }}"
@@ -22,9 +23,17 @@
                     </button>
                 </form>
                 <nav class="hidden 2xl:flex gap-8">
-                    <a href="{{ route('index') }}" class="text-white hover:text-pink font-bold">Главная</a>
-                    <a href="{{ route('catalog') }}" class="text-white hover:text-pink font-bold">Каталог товаров</a>
-                    <a href="cart.html" class="text-white hover:text-pink font-bold">Корзина</a>
+                    @foreach($menu as $item)
+                        <a
+                            href="{{ $item->link() }}"
+                            @class([
+                                'text-white hover:text-pink',
+                                'font-bold' => $item->isActive(),
+])
+                            class="text-white hover:text-pink font-bold">{{ $item->label() }}</a>
+                        </a>
+
+                    @endforeach
                 </nav>
             </div><!-- /.header-menu -->
             <div class="header-actions flex items-center gap-3 md:gap-5">
