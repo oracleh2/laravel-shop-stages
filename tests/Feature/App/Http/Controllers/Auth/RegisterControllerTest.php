@@ -111,7 +111,7 @@ class RegisterControllerTest extends TestCase
     public function it_user_authenticated_after_and_redirected(): void
     {
         $this->request()
-            ->assertRedirect(action([HomeController::class, 'index']));
+            ->assertRedirect(action(HomeController::class));
 
     }
 

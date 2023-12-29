@@ -33,10 +33,6 @@ class CatalogController extends Controller
         }
         $validated = $validate->validated();
 
-        $brands = Brand::query()
-            ->select(['id', 'title'])
-            ->has('products')
-            ->get();
 
         $categories = Category::query()
             ->select(['id', 'title', 'slug'])
@@ -65,6 +61,6 @@ class CatalogController extends Controller
 //            $product->setRelation('brand', Brand::query()->find($product->brand_id));
 //        });
 
-        return view('catalog.index', compact('categories', 'brands', 'products', 'category'));
+        return view('catalog.index', compact('categories', 'products', 'category'));
     }
 }
