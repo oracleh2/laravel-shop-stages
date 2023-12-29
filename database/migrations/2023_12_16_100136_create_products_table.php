@@ -33,6 +33,9 @@ return new class extends Migration
                 ->nullOnDelete()
                 ->cascadeOnUpdate();
 
+            $table->json('json_properties')
+                ->nullable();
+
             $table->timestamps();
 
             $table->fullText(['title', 'description']);

@@ -50,7 +50,9 @@
             <section class="mt-16 lg:mt-24">
                 <h2 class="text-lg lg:text-[42px] font-black">Каталог товаров</h2>
                 <div class="products grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-x-8 gap-y-8 lg:gap-y-10 2xl:gap-y-12 mt-8">
-                    @each('catalog.shared.product', $products, 'item')
+                    @foreach($products as $product)
+                        @include('catalog.shared.product', ['product' => $product])
+                    @endforeach
                 </div>
                 <div class="mt-12 text-center">
                     <a href="{{ route('catalog') }}" class="btn btn-purple">Все товары &nbsp;→</a>

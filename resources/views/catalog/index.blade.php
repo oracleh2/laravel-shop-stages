@@ -89,7 +89,9 @@
                             </div>
                         </div>
                         <div class="products grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 2xl:gap-x-8 gap-y-8 lg:gap-y-10 2xl:gap-y-12">
-                            @each('catalog.shared.product', $products, 'item')
+                            @foreach($products as $product)
+                                @include('catalog.shared.product', ['product' => $product, 'category' => $category])
+                            @endforeach
                         </div>
                         <div class="mt-12">
                             {{ $products->withQueryString()->onEachSide(3)->links() }}
