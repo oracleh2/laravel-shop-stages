@@ -18,4 +18,13 @@ class CategoryViewModel
                 ->get();
         });
     }
+    public function catalog(): Collection|array
+    {
+        return Cache::remember('catalog_categories', 60, function () {
+            return Category::query()
+                ->select(['id', 'title', 'slug'])
+                ->has('products')
+                ->get();
+        });
+    }
 }

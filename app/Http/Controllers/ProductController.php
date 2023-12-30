@@ -2,40 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use Domain\Catalog\Models\Brand;
-use Domain\Catalog\Models\Category;
-use Domain\Catalog\ViewModels\BrandViewModel;
-use Domain\Catalog\ViewModels\CategoryViewModel;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
+use Domain\Product\Models\Product;
+use Domain\Product\Collections\ProductCollection;
+use Domain\Product\ViewModels\ProductViewModel;
 
 class ProductController extends Controller
 {
     public function __invoke(Product $product)
     {
         $product->load(['optionValues.option']);
-        $options = $product->optionValues->mapToGroups(function ($item) {
-            return [$item->option->title => $item];
-        });
-
-        if(session()->has('also')) {
-            $viewed = array_keys(session('also'));
-            $viewed = Product::query()
-                ->whereIn('id', $viewed)
-                ->where('id', '!=', $product->id)
-                ->take(8)
-                ->get();
-        }
-
-        session()
-            ->put('also.' . $product->id, $product->id);
+        session()->put('also.' . $product->id, $product->id);
 
         return view('product.show', [
             'product' => $product,
-            'options' => $options,
-            'viewed' => $viewed ?? null
+            'options' => $product->optionValues->keyValues(),
+            'viewed' => ProductViewModel::make()->viewed($product),
         ]);
     }
 }

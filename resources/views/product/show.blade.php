@@ -8,7 +8,7 @@
             <ul class="breadcrumbs flex flex-wrap gap-y-1 gap-x-4 mb-6">
                 <li><a href="{{ route('index') }}" class="text-body hover:text-pink text-xs">Главная</a></li>
                 <li><a href="{{ route('catalog') }}" class="text-body hover:text-pink text-xs">Каталог</a></li>
-                <li><a href="{{ route('catalog', $product->categories()->first()->slug) }}" class="text-body hover:text-pink text-xs">{{ $product->categories()->first()->title }}</a></li>
+                <li><a href="{{ route('catalog', $product?->categories()?->first()?->slug) }}" class="text-body hover:text-pink text-xs">{{ $product?->categories()?->first()?->title }}</a></li>
                 <li><span class="text-body text-xs">{{ $product->title }}</span></li>
             </ul>
 
@@ -55,13 +55,13 @@
                             <div class="text-pink text-lg md:text-xl font-black">{{ $product->price->value() }} ₽</div>
                             <div class="text-body text-md md:text-lg font-bold line-through">59 300 ₽</div>
                         </div>
+                        @if($product->json_properties !== null)
                         <ul class="sm:max-w-[360px] space-y-2 mt-8">
-                            @foreach($product->properties as $property)
-                                <li class="flex justify-between text-body"><strong class="text-white">{{ $property->title }}:</strong> {{ $property->pivot->value }}</li>
-
+                            @foreach($product->json_properties as $property => $value)
+                                <li class="flex justify-between text-body"><strong class="text-white">{{ $property }}:</strong> {{ $value }}</li>
                             @endforeach
                         </ul>
-
+                        @endif
                         <!-- Add to cart -->
                         <form class="space-y-8 mt-8">
                             <div class="grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-4 gap-4">

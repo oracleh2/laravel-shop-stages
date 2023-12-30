@@ -10,8 +10,7 @@ abstract class AbstractFilter implements Stringable
     public function __invoke(Builder $builder, $next)
     {
         $this->apply($builder);
-        $next($builder);
-
+        return $next($builder);
     }
 
     abstract public function title(): string;
