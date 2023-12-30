@@ -3,6 +3,7 @@
 namespace Support\Traits\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Stringable;
 
 trait HasSlug
 {
@@ -24,10 +25,10 @@ trait HasSlug
                 {
                     $i++;
                 }
-                $model->slug = "{$slug}-{$count}";
+                $model->slug = (string)$slug . "-{$count}";
             }
             else
-                $model->slug = $slug;
+                $model->slug = (string) $slug;
         });
     }
     public static function slugFrom(): string

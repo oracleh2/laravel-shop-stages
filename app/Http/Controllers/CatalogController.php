@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use Domain\Catalog\Models\Brand;
 use Domain\Catalog\Models\Category;
-use Domain\Catalog\ViewModels\BrandViewModel;
 use Domain\Catalog\ViewModels\CategoryViewModel;
+use Domain\Product\Models\Product;
+use Domain\Product\QueryBuilders\ProductQueryBuilder;
+use Domain\Product\ViewModels\ProductViewModel;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,47 +20,17 @@ class CatalogController extends Controller
 {
     public function __invoke(?Category $category, Request $request): View|Factory|Application|RedirectResponse
     {
+        $categories = CategoryViewModel::make()->catalog();
+        $products = ProductViewModel::make()
+            ->catalog(
+                category: $category,
+                page: $request->get('page', 1),
+            );
 
-        $validate = Validator::make(
-            $request->all(),
-            [
-                'q' => 'sometimes|string|max:255',
-            ]
-        );
-        if($validate->failed()){
-            flash()->warning('По вашему запросу ничего не найдено');
-            return redirect()->back();
-        }
-        $validated = $validate->validated();
-
-
-        $categories = Category::query()
-            ->select(['id', 'title', 'slug'])
-            ->has('products')
-            ->get();
-
-        $products = Product::search($validated['q'] ?? '')
-            ->query( function (Builder $query) use ($category) {
-                return $query
-                    ->select(['id', 'title', 'slug', 'price', 'thumbnail'])
-                    ->when($category->exists, function (Builder $query) use ($category) {
-                        $query
-                            ->whereRelation(
-                                'categories',
-                                'categories.id',
-                                '=',
-                                $category->id
-                            );
-                    })
-                    ->filtered()
-                    ->sorted();
-            })
-            ->paginate(12);
-
-//        $products->each(function (Product $product) {
-//            $product->setRelation('brand', Brand::query()->find($product->brand_id));
-//        });
-
-        return view('catalog.index', compact('categories', 'products', 'category'));
+        return view('catalog.index', [
+            'categories' => $categories,
+            'products' => $products,
+            'category' => $category
+        ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,7 +16,7 @@ class RefreshCommand extends Command
         if(app()->isProduction())
             return self::FAILURE;
 
-//        File::cleanDirectory(storage_path('app/public/images/products'));
+        Artisan::call('cache:clear');
         Storage::deleteDirectory('images/products');
         Storage::deleteDirectory('images/brands');
         $this->call('migrate:fresh', [

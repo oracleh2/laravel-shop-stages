@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use Domain\Catalog\Models\Brand;
-use Domain\Catalog\Models\Category;
 use Domain\Catalog\ViewModels\BrandViewModel;
 use Domain\Catalog\ViewModels\CategoryViewModel;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
+use Domain\Product\Models\Product;
+use Domain\Product\ViewModels\ProductViewModel;
 
 class HomeController extends Controller
 {
@@ -17,13 +13,12 @@ class HomeController extends Controller
     {
         $categories = CategoryViewModel::make()->homePage();
         $brands = BrandViewModel::make()->homePage();
-        $products = Product::query()
-            ->with('categories')
-            ->homePage()
-            ->get();
-//        $products->each(function (Product $product) {
-//            $product->setRelation('brand', Brand::query()->find($product->brand_id));
-//        });
-        return view('index', compact('categories', 'brands', 'products'));
+        $products = ProductViewModel::make()->homePage();
+
+        return view('index', [
+            'categories' => $categories,
+            'brands' => $brands,
+            'products' => $products
+        ]);
     }
 }
