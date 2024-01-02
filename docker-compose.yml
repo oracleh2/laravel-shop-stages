@@ -2,7 +2,8 @@ version: '3.8'
 
 networks:
   laravel:
-
+volumes:
+  mysql-data:
 
 services:
   app:
@@ -24,9 +25,10 @@ services:
       - php
       - redis
       - mysql
+      - mysql-test
       - mailhog
-#      - postgres
-#      - postgres-test
+      - postgres
+      - postgres-test
     networks:
       - laravel
 
@@ -37,6 +39,8 @@ services:
     tty: true
     ports:
       - "3306:3306"
+    env_file:
+      - .env.docker
     environment:
       MYSQL_DATABASE: shop
       MYSQL_USER: shop
@@ -44,6 +48,40 @@ services:
       MYSQL_ROOT_PASSWORD: 12312344
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - laravel
+  mysql-test:
+    image: mariadb:10.6
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3307:3306"
+    env_file:
+      - .env.testing
+    environment:
+      MYSQL_DATABASE: shop_test
+      MYSQL_USER: shop_test
+      MYSQL_PASSWORD: 12312344
+      MYSQL_ROOT_PASSWORD: 12312344_test
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql-test
+    networks:
+      - laravel
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8081:80
     networks:
       - laravel
 
@@ -74,6 +112,18 @@ services:
       - POSTGRES_DB=shop_test
       - POSTGRES_USER=shop_test
       - POSTGRES_PASSWORD=12312344_test
+    networks:
+      - laravel
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    ports:
+      - "5050:80"
     networks:
       - laravel
 

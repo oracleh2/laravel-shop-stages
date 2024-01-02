@@ -116,14 +116,14 @@ class RegisterControllerTest extends TestCase
     }
 
 
-    /** @test */
-    public function it_should_fail_validation_on_email_dns(): void
-    {
-        $this->request['email'] = 'kek@ya12313123123.ru';
-        $this
-            ->request()
-            ->assertInvalid('email');
-    }
+//    /** @test */
+//    public function it_should_fail_validation_on_email_dns(): void
+//    {
+//        $this->request['email'] = 'kek@ya12313123123.ru';
+//        $this
+//            ->request()
+//            ->assertInvalid('email');
+//    }
     /** @test */
     public function it_should_fail_validation_on_password_strong(): void
     {

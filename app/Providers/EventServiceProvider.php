@@ -2,10 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\SessionRegeneratedEvent;
 use App\Listeners\SendEmailNewUserListener;
-use App\Notifications\NewUserNotification;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
@@ -28,7 +27,14 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Event::listen(
+          SessionRegeneratedEvent::class, function (SessionRegeneratedEvent $event) {
+            cart()->updateStorageId(
+                $event->oldSessionId,
+                $event->newSessionId
+            );
+          }
+        );
     }
 
     /**

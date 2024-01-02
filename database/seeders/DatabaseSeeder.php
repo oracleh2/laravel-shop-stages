@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
     {
         BrandFactory::new()->count(20)->create();
         $properties = PropertyFactory::new()->count(10)->create();
-        $options = OptionFactory::new()->count(2)->create();
+        OptionFactory::new()->count(2)->create();
         $optionsValues = OptionValueFactory::new()->count(10)->create();
         CategoryFactory::new()->count(20)
             ->has(
@@ -31,6 +31,10 @@ class DatabaseSeeder extends Seeder
                         return ['value' => ucfirst(fake()->word())];
                     })
                     ->hasAttached($optionsValues)
+//                    ->afterCreating(function (Product $product){
+//                        $properties = $product->properties->keyValues();
+//                        $product->updateQuietly(['json_properties' => $properties]);
+//                    })
             )
             ->create();
 

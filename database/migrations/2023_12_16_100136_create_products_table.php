@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('slug')->unique();
             $table->string('thumbnail')->nullable();
             $table->decimal('price', 12, 2)->default(0);
+            $table->unsignedInteger('quantity')->default(0);
             $table->boolean('on_home_page')->default(false);
             $table->integer('sorting')
                 ->default(999);

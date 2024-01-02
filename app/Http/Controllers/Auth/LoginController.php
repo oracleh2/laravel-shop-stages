@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginFormRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Support\SessionRegenerator;
 
 class LoginController extends Controller
 {
@@ -25,7 +26,7 @@ class LoginController extends Controller
             ])->onlyInput('email');
         }
 
-        $request->session()->regenerate();
+        SessionRegenerator::run();
 
         return redirect()->intended(route('index'));
     }
