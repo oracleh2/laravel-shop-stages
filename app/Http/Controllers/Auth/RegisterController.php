@@ -7,6 +7,7 @@ use App\Http\Requests\RegisterFormRequest;
 use Domain\Auth\Contracts\RegisterNewUserContract;
 use Domain\Auth\DTOs\NewUserDTO;
 use Illuminate\Support\Facades\Auth;
+use Support\SessionRegenerator;
 
 class RegisterController extends Controller
 {
@@ -21,7 +22,8 @@ class RegisterController extends Controller
     public function registerMailSubmit(RegisterFormRequest $request, RegisterNewUserContract $action)
     {
         $user = $action(NewUserDTO::fromRequest($request));
-        Auth::login($user);
+
+        SessionRegenerator::run(fn() => auth()->login($user));
 
         return redirect()->intended(route('index'));
     }

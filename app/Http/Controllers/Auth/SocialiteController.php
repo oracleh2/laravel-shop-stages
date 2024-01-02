@@ -8,6 +8,7 @@ use DomainException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
+use Support\SessionRegenerator;
 use Throwable;
 
 class SocialiteController extends Controller
@@ -39,7 +40,7 @@ class SocialiteController extends Controller
 //            'github_refresh_token' => $socialiteUser->refreshToken,
         ]);
 
-        Auth::login($user);
+        SessionRegenerator::run(fn() => auth()->login($user));
 
         return redirect()->route('index');
     }

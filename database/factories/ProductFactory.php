@@ -20,9 +20,11 @@ class ProductFactory extends Factory
 //
             'thumbnail' => $this->faker->fixturesImage('products', 'products', false),
             'description' => $this->faker->realText(),
-            'price' => $this->faker->numberBetween(1000, 100000),
+            'price' => $this->faker->numberBetween(100, 10000),
+            'quantity' => $this->faker->numberBetween(0, 10),
             'on_home_page' => $this->faker->boolean(10),
             'sorting' => $this->faker->numberBetween(1, 999),
         ];
     }
+
 }

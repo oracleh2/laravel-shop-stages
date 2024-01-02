@@ -11,7 +11,7 @@ use Support\Traits\Makeable;
 class Number implements Stringable, Castable
 {
     use Makeable;
-    private readonly int $scale;
+//    private readonly int $scale;
 //    public string $value;
     private array $currencies = [
         'RUB' => '₽',
@@ -19,8 +19,8 @@ class Number implements Stringable, Castable
 
     public function __construct(
         public readonly Number|string|int|float $value = 0,
+        private int $scale = 2,
         private readonly string $currency = 'RUB',
-
     )
     {
         if ($value instanceof static)
@@ -31,7 +31,7 @@ class Number implements Stringable, Castable
                 "Значение [{$value}] должно быть числом",
             );
 
-        if($this->isNegative())
+        if($value < 0)
             throw new InvalidArgumentException(
                 "Значение [{$value}] должно быть положительным числом",
             );
@@ -43,11 +43,11 @@ class Number implements Stringable, Castable
     }
     public function isNegative(): bool
     {
-        return $this->value < 0;
+        return $this->lt(0);
     }
     public function isPositive(): bool
     {
-        return $this->value > 0;
+        return $this->gt(0);
     }
     public function isZero(): bool
     {
@@ -134,6 +134,10 @@ class Number implements Stringable, Castable
     public function price(): string
     {
         return number_format($this->value, $this->scale, '.', ' ') . ' ' . $this->currencySymbol();
+    }
+    public function cartPrice(): string
+    {
+        return number_format($this->value, 2, '.', ' ') . ' ' . $this->currencySymbol();
     }
     public static function castUsing(array $arguments): string
     {

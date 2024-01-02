@@ -59,4 +59,6 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 USER root
 RUN echo 'alias a="php artisan"' >> ~/.bashrc
 RUN echo 'alias z="cd /var/www/shop"' >> ~/.bashrc
+RUN source ~/.bashrc
+
 CMD ["php-fpm", "-y", "/usr/local/etc/php-fpm.conf", "-R"]

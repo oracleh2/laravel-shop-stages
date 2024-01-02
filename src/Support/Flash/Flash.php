@@ -27,20 +27,24 @@ class Flash
         $this->flash($message, 'info');
     }
 
-    public function success(string $message){
-
+    public function success(string $message): void
+    {
+        $this->flash($message, 'success');
     }
 
-    public function error(string $message){
-
+    public function error(string $message): void
+    {
+        $this->flash($message, 'danger');
     }
 
-    public function warning(string $message){
-
+    public function warning(string $message): void
+    {
+        $this->flash($message, 'warning');
     }
 
-    public function notice(string $message){
-
+    public function notice(string $message): void
+    {
+        $this->flash($message, 'notice');
     }
 
     public function alert(string $message): void

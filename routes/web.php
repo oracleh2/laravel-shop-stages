@@ -7,8 +7,10 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Auth\SocialiteGithubController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ThumbnailController;
 use App\Http\Middleware\CatalogViewMiddleware;
@@ -23,6 +25,26 @@ Route::get('/catalog/{category:slug?}', CatalogController::class)
 
 Route::get('/product/{product:slug}', ProductController::class)
     ->name('product');
+
+Route::controller(CartController::class)
+    ->prefix('cart')
+    ->name('cart.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/{product}/add', 'add')->name('add');
+        Route::post('/{cartItem}/quantity', 'quantity')->name('quantity');
+        Route::delete('/{cartItem}/delete', 'delete')->name('delete');
+        Route::delete('/truncate', 'truncate')->name('truncate');
+    });
+
+Route::controller(OrderController::class)
+    ->prefix('order')
+    ->name('order.')
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'handle')->name('handle');
+    });
+
 
 Route::get('/storage/images/{dir}/{method}/{size}/{file}', ThumbnailController::class)
     ->where('method', 'thumb|crop|fill|fit|resize')

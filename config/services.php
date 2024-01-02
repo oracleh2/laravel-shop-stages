@@ -35,7 +35,7 @@ return [
         'client_id' => env('GITHUB_CLIENT_ID'),
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
 //        'redirect' => env('APP_URL'),
-        'redirect' => 'http://cutcode.shop/auth/github/callback',
+        'redirect' => 'http://localhost/auth/github/callback',
     ],
 
 ];
